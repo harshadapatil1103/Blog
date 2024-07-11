@@ -29,10 +29,10 @@ export default function Header() {
         </button>
         <div className='flex gap-2 md:order-2'>
             <button>
-                <FaMoon className='w-12 h-10 hidden sm:inline rounded-full' color='gray'  />
+                <FaMoon className='w-6 h-8 sm:inline rounded-sm border-gray-500'/>
             </button>
             <Link to='/signin'>
-             <button className='px-3 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded text-white'>Sign in</button>
+             <button className='px-3 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded text-white' outline>Sign in</button>
             </Link>
             <Navbar.Toggle/>
             </div>
