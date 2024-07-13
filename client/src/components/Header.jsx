@@ -24,7 +24,7 @@ export default function Header() {
                 
             
         </form>
-        <button className='w-12 h-10 lg:hidden' color='gray' pill>
+        <button className='w-12 h-10 lg:hidden' color='gray'>
         <AiOutlineSearch />
         </button>
         <div className='flex gap-2 md:order-2'>
@@ -32,7 +32,7 @@ export default function Header() {
                 <FaMoon className='w-6 h-8 sm:inline rounded-sm border-gray-500'/>
             </button>
             <Link to='/signin'>
-             <button className='px-3 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded text-white' outline>Sign in</button>
+             <button className='px-3 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded text-white'>Sign in</button>
             </Link>
             <Navbar.Toggle/>
             </div>
