@@ -1,5 +1,7 @@
 import User from "../models/user.model.js";
 import bcryptjs from 'bcryptjs';
+import { errorHandler } from "../utils/error.js";
+import jwt from 'jsonwebtoken'
 export const signup= async(req,res)=>{
     const {username,email,password}=req.body;
     if(!username || !email || !password ||username==='' ||email==='' ||password===''){
@@ -25,4 +27,49 @@ catch(err){
     next(err);
 }
    
+}
+
+export const signin=async(req,res,next)=>{
+    const {email,password}=req.body;
+    console.log(email,password);
+   
+    //validity
+    if(!email ||  !password ||email===''||password===''){
+        next(errorHandler(400, 'All fields are required'));
+    }
+    try{
+    //email validity
+    const validUser=await User.findOne({email});
+    if(!validUser){
+        next(errorHandler(404,'user not found'));
+
+    }
+
+
+
+    //passwordcomparison
+    const validPassword=await bcryptjs.compareSync(password,validUser.password);
+    if(!validPassword){
+        return next(errorHandler(500,"password incorrect"));
+    }
+  
+
+    const token=jwt.sign({id:validUser._id},process.env.JWT_SECRET);
+    const {password:pass,...rest}=validUser._doc; //to remove the password
+
+    res.status(200).cookie('access_token',token,
+        {httpOnly:true}).json(rest);
+   
+//    res.status(400).json({
+//     success:true,
+//     message:"successfully sign in",
+//     data:validUser,
+//    })
+
+
+    }
+    catch(error){
+        console.log(error);
+        next(error);
+    }
 }

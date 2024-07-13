@@ -27,9 +27,10 @@ export default function SignUp() {
       });
 
       const data = await res.json();
+      //for 
       if (data.success === false) {
         return setErrorMessage(data.message);
-      }
+}
       setLoading(false);
       if(res.ok) {
         navigate('/signIn');
