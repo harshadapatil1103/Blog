@@ -62,3 +62,27 @@ if(req.body.username){
 
 
 }
+
+export const deleteUser=async(req,res,next)=>{
+  const userId = String(req.user.id).trim();
+  const paramId = String(req.params.userId).trim();
+ 
+
+if(req.user.id !== req.params.userId){
+    return next(errorHandler(403,"not allow to deletethis"));
+}
+  try{
+    const response=await User.deleteOne({_id:userId});
+     console.log("user delated");
+     res.json({
+      success:true,
+      message:"deleted successfully",
+    
+     })
+  }
+
+  catch(error){
+    next(error);
+  }
+
+}
