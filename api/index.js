@@ -4,7 +4,7 @@ import userRoutes from './routes/user.route.js';
 import dbconnect from './config/database.js';
 import authRoute from './routes/auth.route.js'
 import cors from 'cors';
-//create instance 
+//create instance of 
 const app=express();
 // const corsOptions={
 //   origin:"http://127.0.0.1:5173",
