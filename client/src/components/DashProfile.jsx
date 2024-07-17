@@ -5,7 +5,7 @@ import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/st
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { app } from '../firebase';
-import { updateStart,updateSuccess,updateFailure,deleteStart,deleteSuccess,deleteFailure } from '../redux/user/user.Slice.js';
+import { updateStart,updateSuccess,updateFailure,deleteStart,deleteSuccess,deleteFailure,signoutStart,signoutSuccess,signoutFailure } from '../redux/user/user.Slice.js';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
@@ -47,6 +47,7 @@ useEffect(()=>{
   const fileName=new Date().getTime()+imageFile.name;
   const storageRef=ref(storage,fileName);
   const uploadTask=uploadBytesResumable(storageRef,imageFile);
+
   uploadTask.on(
     'state_changed',
     (snapshot)=>{
@@ -74,8 +75,6 @@ useEffect(()=>{
   const handleChange=(e)=>{
     setFormData({...formData,[e.target.id]:e.target.value});
    console.log(formData);
-   
-
   };
 
 const handleSubmit=async (e)=>{
@@ -130,7 +129,7 @@ setUpdateUserError(error.message);
  const handleDeleteUser=async (req,res,next)=>{
   setShowModal(false);
   try{
-  dispatch(deleteStart);
+  dispatch(deleteStart());
   const res=await fetch(`/api/user/delete/${currentUser._id}`,{
     method:'DELETE'
   });
@@ -150,10 +149,31 @@ console.log("successfully deleted");
 catch(error){
   dispatch(deleteFailure(error.message));
 
-
+}
 }
 
- }
+const handleSignout=async (req,res,next)=>{
+
+  try{
+    dispatch(signoutStart());
+    const res=await fetch(`/api/user/signout/${currentUser.id}`,{
+    method:'POST',
+    })
+    const data=res.json;
+    if(!res.ok){
+      dispatch(signoutFailure(data.message));
+    }
+    else{
+      dispatch(signoutSuccess(data.message));
+    }
+
+  }
+  catch(error){
+    dispatch(signoutFailure(data.message));
+  }
+}
+
+ 
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -218,7 +238,7 @@ catch(error){
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span onClick={()=>setShowModal(true)} className='cursor-pointer'>Delete Account</span>
-        <span className='cursor-pointer'>Sign Out</span>
+        <span className='cursor-pointer' onClick={handleSignout}>Sign Out</span>
       </div>
      
       <Modal show={showModal} size="md" onClose={() => setShowModal(false)} popup>
