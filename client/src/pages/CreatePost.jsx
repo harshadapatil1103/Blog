@@ -12,12 +12,15 @@ import {CircularProgressbar} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { app } from '../firebase';
 import { Alert } from 'flowbite-react';
+import {useNavigate} from 'react-router-dom';
 export default function CreatePost() {
   const [file,setFile]=useState(null);
   const [imageUploadProgress,setImageUploadProgress]=useState(null);
   const [imageUploadError,setImageUploadError]=useState(null);
   const [formData,setFormData]=useState({});
-
+  const [publishError,setPublishError]=useState(null)
+  const navigate=useNavigate();
+console.log(formData);
 const handleUploadImage=async()=>{
 try{
   if(!file){
@@ -50,10 +53,12 @@ try{
 
 }
 );
+
+
 }
 
 
-   catch(error){
+  catch(error){
   setImageUploadError('image upload failed');
   setImageUploadProgress(null);
   console.log(error);
@@ -65,27 +70,33 @@ try{
     setFormData({...formData, [e.target.id]:e.target.value})
   }
 
-//   const handleSubmit=async (req,res,next)=>{
-
-//    const res=await fetch('/api/post/create',{
-//    method:"POST",
-//    headers: { 'Content-Type': 'application/json' },
-//    body: JSON.stringify(formData),
-
-//     });
-//     const data=res.json();
-//     if(data.success==false){
-
-//     }
-//     if(res.ok){
-
-//     }
-// }
+   const handleSubmit=async (e)=>{
+   e.preventDefault();
+  try{
+    const res=await fetch('/api/post/create',{
+      method:"POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+      });
+     const data=await res.json();
+     if(data.success==false){
+     setPublishError(data.message);
+     return;
+     }
+     if(res.ok){
+       setPublishError(null);
+       navigate(`/post/${data.slug}`);
+     }
+  }
+  catch(error){
+    setPublishError(error);
+  }
+}
 
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
       <h1 className='text-center text-3xl my-7 font-semibold'>Create a post</h1>
-      <form className='flex flex-col gap-4' >
+      <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <TextInput
             type='text'
@@ -95,7 +106,7 @@ try{
             className='flex-1'
             onChange={handleChange}
           />
-          <Select   onChange={handleChange}>
+          <Select id='category'  onChange={handleChange}>
             <option value='uncategorized'>Select a category</option>
             <option value='javascript'>JavaScript</option>
             <option value='reactjs'>React.js</option>
@@ -138,11 +149,14 @@ try{
           placeholder='Write something...'
           className='h-72 mb-12'
           required
-          onChange={handleChange}
+          onChange={(value)=>{setFormData({...formData,content:value})}}
         />
         <Button type='submit' gradientDuoTone='purpleToPink'>
           Publish
         </Button>
+        {
+          publishError && <Alert className='mt-5' color='failure'>{publishError}</Alert>
+        }
       </form>
     </div>
   );
