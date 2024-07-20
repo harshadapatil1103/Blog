@@ -1,5 +1,5 @@
 import { Sidebar } from 'flowbite-react';
-import { HiUser, HiArrowSmRight ,HiDocumentText } from 'react-icons/hi';
+import { HiUser, HiArrowSmRight ,HiDocumentText,HiOutlineUserGroup } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { signoutStart,signoutSuccess,signoutFailure } from '../redux/user/user.Slice.js';
@@ -67,7 +67,20 @@ const { currentUser } = useSelector((state) => state.user);
             </Link>
             )
           }
-          <Sidebar.Item icon={HiArrowSmRight} className='cursor-pointer' onClick={handleSignout}>
+           {
+            currentUser.isAdmin && (
+              <Link to='/dashboard?tab=users'>
+              <Sidebar.Item
+                active={tab === 'users'}
+                icon={HiDocumentText}
+                as='div'
+              >
+                Users
+              </Sidebar.Item>
+            </Link>
+            )
+          }
+          <Sidebar.Item icon={HiOutlineUserGroup} className='cursor-pointer' onClick={handleSignout}>
             Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>
