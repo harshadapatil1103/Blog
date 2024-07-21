@@ -6,6 +6,7 @@ import authRoute from './routes/auth.route.js';
 import postRoute from './routes/post.route.js';
 import cookieParser from 'cookie-parser'
 import cors from 'cors';
+import commentRoute from './routes/comment.route.js';
 //create instance of 
 const app=express();
 app.use(cookieParser());
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use('/api/user',userRoutes);
 app.use('/api/auth',authRoute);
 app.use('/api/post',postRoute);
+app.use('/api/comment', commentRoute);
 //to access env var
 dotenv.config();
 //connect db

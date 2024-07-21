@@ -14,7 +14,9 @@ export default function DashUsers() {
     const fetchUsers = async () => {
       try {
         const res = await fetch(`/api/user/getusers`);
+        
         const data = await res.json();
+        console.log(data);
         if (res.ok) {
           setUsers(data.users);
           if (data.users.length < 9) {
@@ -27,8 +29,11 @@ export default function DashUsers() {
     };
     if (currentUser.isAdmin) {
       fetchUsers();
+      console.log(users.length);
     }
   }, [currentUser._id]);
+
+  
 
   const handleShowMore = async () => {
     const startIndex = users.length;

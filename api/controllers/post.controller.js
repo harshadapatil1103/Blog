@@ -50,7 +50,7 @@ export const getposts = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit)
 
-
+// console.log(posts);
   const totalPosts=await Post.countDocuments();
 
   const now=new Date();

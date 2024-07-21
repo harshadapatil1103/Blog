@@ -128,6 +128,8 @@ export const getusers=async (req,res,next)=>{
     createdAt:{$gte:oneMonthAgo},
   });
 
+  console.log(userWithoutPassword);
+
    res.status(200).json({
     users:userWithoutPassword,
     totalUsers,
