@@ -1,5 +1,5 @@
 import { Sidebar } from 'flowbite-react';
-import { HiUser, HiArrowSmRight ,HiDocumentText,HiOutlineUserGroup } from 'react-icons/hi';
+import { HiUser, HiArrowSmRight ,HiDocumentText,HiOutlineUserGroup ,HiAnnotation,HiChartPie} from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { signoutStart,signoutSuccess,signoutFailure } from '../redux/user/user.Slice.js';
@@ -44,6 +44,17 @@ const { currentUser } = useSelector((state) => state.user);
       <Sidebar.Items>
         <Sidebar.ItemGroup className='flex flex-col gap-1'>
           <Link to='/dashboard?tab=profile'>
+          {currentUser && currentUser.isAdmin && (
+            <Link to='/dashboard?tab=dash'>
+              <Sidebar.Item
+                active={tab === 'dash' || !tab}
+                icon={HiChartPie}
+                as='div'
+              >
+                Dashboard
+              </Sidebar.Item>
+            </Link>
+          )}
             <Sidebar.Item
               active={tab === 'profile'}
               icon={HiUser}
@@ -69,6 +80,8 @@ const { currentUser } = useSelector((state) => state.user);
           }
            {
             currentUser.isAdmin && (
+              <>
+
               <Link to='/dashboard?tab=users'>
               <Sidebar.Item
                 active={tab === 'users'}
@@ -78,6 +91,19 @@ const { currentUser } = useSelector((state) => state.user);
                 Users
               </Sidebar.Item>
             </Link>
+              <Link to='/dashboard?tab=comments'>
+              <Sidebar.Item
+                active={tab === 'comments'}
+                icon={HiAnnotation}
+                as='div'
+              >
+                Comments
+              </Sidebar.Item>
+            </Link>
+           
+            
+        
+            </>
             )
           }
           <Sidebar.Item icon={HiOutlineUserGroup} className='cursor-pointer' onClick={handleSignout}>
