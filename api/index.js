@@ -40,7 +40,7 @@ dbconnect();
 
 //middleware to handle error
 app.use((err, req, res, next) => {
-    const statusCode = err.statusCode || 300;
+    const statusCode = err.statusCode || 404;
     const message = err.message || 'Internal  Error';
     res.status(statusCode).json({
       success: false,
