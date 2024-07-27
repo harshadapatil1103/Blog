@@ -246,7 +246,7 @@ const handleSignout=async (req,res,next)=>{
                   gradientDuoTone='purpleToPink'
                   className='w-full'
           >
-            crate a post
+            create a post
           </Button>
           </Link>
         )
